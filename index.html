@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Loading</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Arial Black',sans-serif;}
+
+body{
+height:100vh;
+overflow:hidden;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* BACKGROUND POSTER */
+.bg{
+position:absolute;
+width:100%;
+height:100%;
+background:url('poster.jpg') center/cover no-repeat;
+animation:zoom 20s ease-in-out infinite alternate;
+filter:brightness(0.6);
+}
+
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.1);}
+}
+
+/* OVERLAY */
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+}
+
+/* CONTAINER */
+.container{
+position:relative;
+z-index:2;
+text-align:center;
+}
+
+/* TICKET CARD */
+.ticket{
+background:rgba(0,0,0,0.7);
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(255,77,45,0.6);
+margin-bottom:20px;
+animation:fadeIn 2s ease;
+}
+
+.ticket h1{
+color:#ff4d2d;
+text-shadow:4px 4px 0 black;
+}
+
+.ticket p{
+font-size:13px;
+opacity:0.8;
+}
+
+/* LOADING BAR */
+.progress-box{
+width:280px;
+height:10px;
+background:#222;
+border-radius:20px;
+overflow:hidden;
+margin:auto;
+}
+
+.progress{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff4d2d,#00ffcc,#ffd700);
+transition:width 0.2s;
+}
+
+/* STATUS */
+#status{
+margin-top:10px;
+font-size:13px;
+color:#00ffcc;
+}
+
+/* TERMINAL */
+#terminal{
+margin-top:10px;
+font-size:12px;
+color:#00ffcc;
+height:50px;
+}
+
+/* FADE */
+.fadeOut{
+animation:fade 1s forwards;
+}
+@keyframes fade{
+to{opacity:0;}
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="overlay"></div>
+
+<div class="container">
+
+    <!-- TIKET -->
+    <div class="ticket">
+        <h1>SHEILA ON 7</h1>
+        <p>BALI • 04.07.2026</p>
+        <p>Bali United Training Center</p>
+    </div>
+
+    <!-- LOADING -->
+    <div class="progress-box">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <div id="status">Initializing Event System...</div>
+    <div id="terminal"></div>
+
+</div>
+
+<script>
+let progress = 0;
+let duration = 30000; // 30 DETIK
+let start = Date.now();
+
+let progressBar = document.getElementById("progress");
+let terminal = document.getElementById("terminal");
+let statusText = document.getElementById("status");
+
+let logs = [
+"Connecting to POLIPONI Server...",
+"Scanning ticket database...",
+"Verifying access...",
+"Synchronizing event data...",
+"Finalizing system..."
+];
+
+let logIndex = 0;
+
+// update progress smooth 30 detik
+let interval = setInterval(() => {
+let elapsed = Date.now() - start;
+progress = (elapsed / duration) * 100;
+
+if(progress >= 100){
+progress = 100;
+clearInterval(interval);
+
+statusText.innerText = "ACCESS GRANTED";
+
+setTimeout(()=>{
+document.body.classList.add("fadeOut");
+
+setTimeout(()=>{
+window.location.href = "https://soekarnofestrun2026-rgb.github.io/Sheila-On-7/";
+},1000);
+
+},2000);
+}
+
+// update bar
+progressBar.style.width = progress + "%";
+
+// update log
+if(logIndex < logs.length && progress > (logIndex+1)*20){
+terminal.innerHTML += logs[logIndex] + "<br>";
+logIndex++;
+}
+
+},100);
+</script>
+
+</body>
+</html>
